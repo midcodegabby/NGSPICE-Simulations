@@ -1,0 +1,27 @@
+.title Ngspice simulation of BJT in a circuit with my paramaters
+
+*this is a simulation of a BJT common emitter amplifier schematic
+
+.include 2n4401.mod	; BJT 
+
+vcc	vcc	gnd	dc	12	; input voltage source to collector
+vin	vin	gnd	sin(0	0.5m	1khz)	; input source
+r1	vcc 	base		27k
+r2	base	gnd		2.7k
+r3	emitter	gnd		100	; resistor after the emitter
+r4	vcc	collector	1.5k	; resistor before the collector
+c1	vin	base		10u
+c2	collector	vout	10u
+r5	vout	gnd		2k
+q1	collector	base	emitter 2N4401		; BJT
+
+.control
+	set numdgt=3
+	op
+	print v(base) v(collector) v(emitter)	
+	
+	tran 20u 5m
+	plot v(vin) v(vout)
+.endc
+
+	

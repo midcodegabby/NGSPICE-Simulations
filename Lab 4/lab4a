@@ -1,0 +1,22 @@
+.title Ngspice simulation of current mirror
+
+*this is a simulation of a BJT current mirror
+
+.include 2n4401.mod	; BJT 
+
+vcc	vcc	gnd	dc	10	; input voltage source to collector
+v_s1	vcc	r1_tie  dc	0	; current measurer
+v_s2	vcc	r2_tie	dc	0	; current measurer
+r1	r1_tie  q1_c		20.6k	
+r2	r2_tie	q2_c		1k	
+q1	q1_c 	q1_c 	gnd	2N4401		; BJT
+q2	q2_c	q1_c	gnd	2N4401		; BJT
+
+.control
+	set numdgt=3
+	op
+	print v(q1_c) v(q2_c) i(v_s1) i(v_s2)	
+	
+.endc
+
+	

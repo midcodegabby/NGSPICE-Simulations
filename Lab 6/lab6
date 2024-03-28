@@ -1,0 +1,28 @@
+.title Ngspice simulation of opamp
+
+*this is a simulation of an opamp
+
+.include LM358.subckt			; opamp
+
+vin	in	gnd	sin(0 1 120 0 0 0)
+vcc	vcc	gnd	dc	10 	; input voltage source opamp
+r1	r1_tie	in_neg		1.5k
+r2	in_neg	amp_out		5.6k
+ra	vcc	in_pos		10k
+rb	in_pos	gnd		10k
+cin	r1_tie	in		10u
+cout	amp_out	vo		10u
+cbyp	in_pos	gnd		1u
+rload	vo	gnd		10k
+XOAMP	in_pos	in_neg	vcc	gnd	amp_out	LM358 ; opamp
+
+.control
+	destroy all
+	set numdgt=3
+	op
+	tran 50u 50m
+	plot v(in) v(in_neg)
+	
+.endc
+
+	

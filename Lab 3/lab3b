@@ -1,0 +1,29 @@
+.title Ngspice simulation of BJT in a circuit with my paramaters trying to get double the gain of the last lab
+
+*this is a simulation of a BJT common emitter amplifier schematic
+
+.include 2n4401.mod	; BJT 
+
+vcc	vcc	gnd	dc	12	; input voltage source to collector
+vin	vin	gnd	sin(0	10m	1khz)	; input source (was 0.5m)
+r1	vcc 	base		27k
+r2	base	gnd		2.7k
+r4	vcc	collector	1.5k	; resistor before the collector
+r5	vout	gnd		2k
+r6	emitter n0		50
+r7	n0	gnd		50
+c1	vin	base		100u
+c2	collector	vout	100u
+c3	n0	gnd		100u
+q1	collector	base	emitter 2N4401		; BJT
+
+.control
+	set numdgt=3
+	op
+	print v(base) v(collector) v(emitter)	
+	
+	tran 20u 5m
+	plot v(vin) v(vout)
+.endc
+
+	

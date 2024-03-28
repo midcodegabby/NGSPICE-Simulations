@@ -1,0 +1,24 @@
+.title Ngspice simulation of LED driver
+
+*this is a simulation of a LED driver
+
+.include 2n4401.mod	; BJT 
+.include xqawht.mod	; LED model 
+
+v_in	vcc	gnd	dc	10 	; input voltage source to LEDs
+v_s	vcc	d_in	dc	0	; current measurer
+r1	vcc	q2_b		1k	
+r2	q2_e	gnd		22	
+d1	d_in	led_tie		XQAWHT  ; LED
+d2	led_tie	q2_c		XQAWHT
+q1	q2_b	q2_e	gnd	2N4401	; BJT
+q2	q2_c	q2_b	q2_e	2N4401	; BJT
+
+.control
+	set numdgt=3
+	op
+	print i(v_s) v(q2_c) v(q2_e)
+	
+.endc
+
+	

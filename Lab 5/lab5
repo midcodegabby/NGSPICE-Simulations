@@ -1,0 +1,36 @@
+.title Ngspice simulation of voltage regulator
+
+*this is a simulation of a voltage regulator that uses a differential amplifier
+
+.include 2n4403.mod	; pnp BJT 
+.include 2n4401.mod 	; npn BJT
+.include 1n5227.mod	; Zener Diode
+
+v_in	v_in	gnd	dc	12		; DC voltage source
+v_c	v_c	v_out	dc	0		; current measuring VS
+*v_in1	v_in	v_mid	pulse(0 15 0 .5 .5 1 2 0)
+*v_in2	v_mid	gnd	sin(0 1 120 0 0 0)
+r1	v_in	q1_b		1k	
+r2	v_in	q3_b		10k	
+r3	common_e gnd		270	
+r4	v_out	q2_b		1k	
+r5	q2_b	gnd		0.65k
+r_load	v_out	gnd		100 		; load resistor
+c1	q1_b	gnd		0.1u 		; Zener Diode decoupling capacitor
+c2	v_out	q2_b		2.7n 		; v_out decoupler
+d1	gnd	q1_b		1N5227		; Zener Diode
+q1	q3_b	q1_b	common_e 2N4401		; npn BJT
+q2	v_in	q2_b	common_e 2N4401		; npn BJT
+q3	v_c 	q3_b	v_in	2N4403		; pnp BJT
+
+.control
+	destroy all
+	set numdgt=3
+	op
+	print v(v_in) v(v_out) i(v_c)
+	
+	tran 50u 50m
+	plot v(v_in) v(v_out)
+.endc
+
+	

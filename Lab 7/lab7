@@ -1,0 +1,40 @@
+.title Ngspice simulation of opamp oscillator
+
+*this is a simulation of an opamp oscillator
+
+.include MCP6281.subckt			; IC
+
+XAmp1	vcc	in_neg	vdd	gnd	vout1	MCP6281 ; opamp 1
+XAmp2	vin1	vout2	vdd	gnd	vout2	MCP6281 ; 
+XAmp3	vin2	vout3	vdd	gnd	vout3	MCP6281 ;
+XAmp4	vin3	vout4	vdd	gnd	vout4	MCP6281 ; 
+
+vdd	vdd	gnd	dc	5	; input voltage
+vpulse	vin4	in	pulse(0 1 0 2n 2n 1m 0 0)
+
+r1	in	in_neg		360k
+r2	in_neg	vout1		1.5meg 
+*r3	neg_tie	vout1		4.7k
+r4	vout1	vin1		10k
+r5	vout2	vin2		10k
+r6	vout3	vin3		10k
+r7	vout4	vin4		10k
+r8	vdd	vcc		10k
+r9	vcc	gnd		10k
+
+c1	vin1	gnd		10n
+c2	vin2	gnd		10n
+c3	vin3	gnd		10n
+c4	vin4	gnd		10n
+c5	vcc	gnd		100u
+
+.control
+	destroy all
+	set numdgt=3
+	op
+	tran 100u 5m 
+	plot v(in) v(vout1) v(vout2) v(vout3)
+	
+.endc
+
+	
